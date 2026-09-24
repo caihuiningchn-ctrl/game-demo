@@ -22,6 +22,13 @@ h1 {
     align-items: center;
 
 }
+
+.game-info {
+    display: flex;
+    justify-content: space-between;
+    width: 500px;
+}
+
 .background {
     width: 500px;
     height: 500px;
@@ -92,6 +99,11 @@ button {
 }
 
 .timer {
+    font-size: 24px;
+    margin: 10px;
+}
+
+.score {
     font-size: 24px;
     margin: 10px;
 }

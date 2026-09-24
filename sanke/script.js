@@ -10,6 +10,7 @@ const reStart = document.querySelector("#reStart");
 const food = document.querySelector(".food");
 const bomb = document.querySelector(".bomb");
 const timerDisplay = document.querySelector(".timer");
+const scoreDisplay = document.querySelector(".score");
 
 
 let headPosition = {
@@ -22,6 +23,8 @@ head.style.top = headPosition.y * cellSize + "px";
 
 let gameInterval;
 let speed = 500;
+
+
 
 const initialPosition = {
     x: 12,
@@ -50,19 +53,22 @@ function createFood() {
 
 function startFood() {
     createFood();
-    console.log(foodTime);
+    // console.log(foodTime);
     foodInterval = setInterval(createFood, foodTime);
 
 }
 
 
 function eatFood() {
-
+    let score = parseInt(scoreDisplay.textContent.split(": ")[1]);
     if (foodPosition.x === headPosition.x && foodPosition.y === headPosition.y) {
         
         stopFood();
         startFood();
         createBody();
+
+        score++;
+        scoreDisplay.textContent = `スコア: ${score}`;
     }
 }
 
@@ -99,8 +105,8 @@ function startBomb() {
 function touchBomb() {
 
     if (bombPosition.x === headPosition.x && bombPosition.y === headPosition.y) {
-        console.log("bombPosition: ", bombPosition);
-        console.log("headPosition: ", headPosition);
+        // console.log("bombPosition: ", bombPosition);
+        // console.log("headPosition: ", headPosition);
         showGameOver();
     }
 }
@@ -122,14 +128,14 @@ function startTimer() {
         let seconds = time % 60;
 
         timerDisplay.textContent =
-            `Time: ${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+            `時間: ${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
     }, 1000);
 }
 
 function resetTimer() {
     clearInterval(timer);
     time = 0;
-    timerDisplay.textContent = "Time: 00:00";
+    timerDisplay.textContent = "時間: 00:00";
 }
 
 function stopTimer() {
@@ -187,8 +193,8 @@ function createBody() {
 function checkSelfCollision() {
 
     for (let body of bodyPosition) {
-        console.log("body: ", body);
-        console.log("headPosition: ", headPosition);
+        // console.log("body: ", body);
+        // console.log("headPosition: ", headPosition);
         if (headPosition.x === body.x && headPosition.y === body.y) {
             showGameOver();
         }
@@ -312,6 +318,7 @@ function move() {
 
 function stopMove() {
     clearInterval(gameInterval);
+    clearTimeout(boostTimer);
 
 }
 
@@ -337,6 +344,7 @@ reStart.addEventListener("click", function () {
     startButton.style.display = "";
     food.style.display = "none";
     bomb.style.display = "none";
+    scoreDisplay.textContent = "スコア: 0";
 
     bodyPosition = [];
 
@@ -377,28 +385,72 @@ stopButton.addEventListener("click", function () {
 
 
 // ===== キーボード操作 =====
+let isBoosting = false;
+let boostTimer;
+let boostSpeed = 200;
+let activeKey = null;
 
 document.addEventListener("keydown", function (event) {
-    if(startButton.style.display != "none"){
+    if (startButton.style.display != "none") {
         return;
     }
+    if (gameOver.style.display === "block") {
+        return;
+    }
+
+    let moveFunction;
+
     if (event.key === "ArrowUp") {
-        stopMove();
-        gameInterval = setInterval(moveUp, speed);
+        moveFunction = moveUp;
+    } else if (event.key === "ArrowDown") {
+        moveFunction = moveDown;
+    } else if (event.key === "ArrowLeft") {
+        moveFunction = moveLeft;
+    } else if (event.key === "ArrowRight") {
+        moveFunction = moveRight;
+    } else {
+        return;
     }
 
-    if (event.key === "ArrowDown") {
-        stopMove();
-        gameInterval = setInterval(moveDown, speed);
+    // 長押しによるkeydownの繰り返しを防ぐ
+    if (event.key === activeKey) {
+        return;
     }
 
-    if (event.key === "ArrowLeft") {
-        stopMove();
-        gameInterval = setInterval(moveLeft, speed);
+    activeKey = event.key;
+    currentMove = moveFunction;
+    isBoosting = false;
+
+    // 通常の速度で移動する
+    stopMove();
+    gameInterval = setInterval(currentMove, speed);
+
+    // 500ミリ秒長押しすると加速する
+    clearTimeout(boostTimer);
+    boostTimer = setTimeout(function () {
+        if (activeKey === event.key) {
+            isBoosting = true;
+
+            stopMove();
+            gameInterval = setInterval(currentMove, boostSpeed);
+        }
+    }, 500);
+});
+
+document.addEventListener("keyup", function (event) {
+    if (event.key !== activeKey) {
+        return;
     }
 
-    if (event.key === "ArrowRight") {
+    clearTimeout(boostTimer);
+
+    // キーを離すと通常の速度に戻る
+    if (isBoosting) {
+        isBoosting = false;
+
         stopMove();
-        gameInterval = setInterval(moveRight, speed);
+        gameInterval = setInterval(currentMove, speed);
     }
+
+    activeKey = null;
 });
