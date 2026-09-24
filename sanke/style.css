@@ -74,6 +74,14 @@ button {
 
 }
 
+.bomb{
+    width: 20px;
+    height: 20px;
+    background-image: url("images/bomb.png");
+    position: absolute;
+
+}
+
 .body{
     display:none;
     width: 20px;

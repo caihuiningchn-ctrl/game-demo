@@ -8,6 +8,7 @@ const stopButton = document.querySelector("#stopButton");
 const reStart = document.querySelector("#reStart");
 
 const food = document.querySelector(".food");
+const bomb = document.querySelector(".bomb");
 
 
 let headPosition = {
@@ -19,7 +20,7 @@ head.style.left = headPosition.x * cellSize + "px";
 head.style.top = headPosition.y * cellSize + "px";
 
 let gameInterval;
-let speed = 700;
+let speed = 500;
 
 const initialPosition = {
     x: 12,
@@ -28,7 +29,7 @@ const initialPosition = {
 
 // food
 let foodInterval;
-const foodTime = speed;
+const foodTime = speed*25;
 let foodPosition = {
     x: 0,
     y: 0
@@ -56,12 +57,55 @@ function startFood() {
 
 function eatFood() {
 
-    if (foodPosition.x === headPosition.x &&
-        foodPosition.y === headPosition.y) {
-
+    if (foodPosition.x === headPosition.x && foodPosition.y === headPosition.y) {
+        
+        stopFood();
+        startFood();
         createBody();
-        createFood();
     }
+}
+
+function stopFood() {
+    clearInterval(foodInterval);
+}
+
+// bomb
+let bombInterval;
+const bombTime = speed*30;
+let bombPosition = {
+    x: 0,
+    y: 0
+};
+
+function createBomb() {
+    bomb.style.display = "";
+
+    bombPosition.x = Math.floor(Math.random() * 25);
+    bombPosition.y = Math.floor(Math.random() * 25);
+
+    bomb.style.left = bombPosition.x * cellSize + "px";
+    bomb.style.top = bombPosition.y * cellSize + "px";
+}
+
+
+function startBomb() {
+    createBomb();
+    console.log(bombTime);
+    bombInterval = setInterval(createBomb, bombTime);
+
+}
+
+
+function touchBomb() {
+
+    if (bombPosition.x === headPosition.x && bombPosition.y === headPosition.y) {
+        
+        showGameOver();
+    }
+}
+
+function stopBomb() {
+    clearInterval(bombInterval);
 }
 
 //body
@@ -95,7 +139,6 @@ function moveBodyPosition(oldHeadPosition) {
 
     moveBody();
 }
-
 
 
 function createBody() {
@@ -202,6 +245,8 @@ function checkBoundary() {
 
 function showGameOver() {
     stopMove();
+    stopFood();
+    stopBomb();
 
     gameOver.style.display = "block";
     reStart.style.display = "";
@@ -225,9 +270,7 @@ function move() {
 
 function stopMove() {
     clearInterval(gameInterval);
-    clearInterval(foodInterval);
-    
-    
+
 }
 
 
@@ -236,6 +279,8 @@ function stopMove() {
 reStart.addEventListener("click", function () {
 
     stopMove();
+    stopFood();
+    stopBomb();
 
     headPosition.x = initialPosition.x;
     headPosition.y = initialPosition.y;
@@ -250,7 +295,7 @@ reStart.addEventListener("click", function () {
     startButton.style.display = "";
     food.style.display = "none";
 
-    createFood();
+    startFood();
     bodyPosition = [];
 
     const bodies = document.querySelectorAll(".body");
@@ -267,6 +312,7 @@ reStart.addEventListener("click", function () {
 
 startButton.addEventListener("click", function () {
     startFood();
+    startBomb();
     gameInterval = setInterval(moveRight, speed);
 
     startButton.style.display = "none";
@@ -280,7 +326,7 @@ startButton.addEventListener("click", function () {
 stopButton.addEventListener("click", function () {
 
     stopMove();
-
+    stopFood();
     startButton.style.display = "";
     stopButton.style.display = "none";
 });
