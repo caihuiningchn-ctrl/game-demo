@@ -184,6 +184,17 @@ function createBody() {
 
 }
 
+function checkSelfCollision() {
+
+    for (let body of bodyPosition) {
+        console.log("body: ", body);
+        console.log("headPosition: ", headPosition);
+        if (headPosition.x === body.x && headPosition.y === body.y) {
+            showGameOver();
+        }
+    }
+
+}
 
 
 // ===== 移動 =====
@@ -287,6 +298,7 @@ function showGameOver() {
 
 function move() {
     checkBoundary();
+    checkSelfCollision();
     
     head.style.left = headPosition.x * cellSize + "px";
     head.style.top = headPosition.y * cellSize + "px";
@@ -343,6 +355,7 @@ startButton.addEventListener("click", function () {
     startTimer();
     startFood();
     startBomb();
+   
     gameInterval = setInterval(moveRight, speed);
 
     startButton.style.display = "none";
