@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High & Low Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <h1>ハイ & ロー ゲーム</h1>
+
+    <div class="game">
+
+        <!-- 開始画面 -->
+        <div id="startScreen">
+
+            <div id = "rule">🎮 ルール</div>
+            <div>最初のポイントは「0ポイント」！</div>
+            <div>1回成功すると「1ポイント」獲得！</div>
+            <div>その後、連続で成功するたびにポイントが2倍に！</div>
+            <div>1回でも失敗すると、ポイントは「0」に戻ります。</div>
+            <div>10回連続成功で、ポイント全獲得！🎉</div>
+            <button id="StartButton">始めよう！</button>
+        </div>
+
+        <!-- ゲーム画面 -->
+        <div id="gameScreen" style="display: none;">
+
+            <div class="cards">
+                <div class="card" id="currentCard">7</div>
+                <div class="arrow" id = "Rarrow" style="display: none;">→</div>
+                <div class="card" id="newCard" style="display: none;"></div>
+            </div>
+            
+            <div class="buttons">
+                <button id="HighButton">ハイ</button>
+                <button id="LowButton">ロー</button>
+            </div>
+
+            <div class="buttons">
+                <button id="EndButton">終了</button>
+                <button id="ReStartButton" style = "display: none;">もう一回</button>
+            </div>
+
+            <div><spin id = "result"></spin></div>
+            <div>成功回数：<span id = "success">0</span>/Point: <span id="point">0</span></div>
+        
+        </div>
+        
+        <!-- 終了画面 -->
+        <div id="endScreen" style="display: none;">
+
+            <div><span id="endText"></span></div>
+            <div><span id="endSucc"></span>回成功しました！</div>
+            <div><span id="endPoint"></span>ポイントもらいました！</div>
+            
+        </div>
+
+    </div>
+
+</div>
+
+    <script src="script.js"></script>
+</body>
+</html>

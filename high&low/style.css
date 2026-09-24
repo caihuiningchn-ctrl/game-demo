@@ -1,0 +1,114 @@
+body {
+    margin: 0;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    margin-bottom: 30px;
+}
+
+.game{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#rule{
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.cards {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.card {
+    width: 120px;
+    height: 170px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 10px;
+
+    font-size: 50px;
+    margin-bottom: 30px;
+}
+
+.arrow {
+    font-size: 40px;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 50px;
+}
+
+.buttons {
+    display: flex;
+    gap: 20px;
+}
+
+button {
+    width: 130px;
+    padding: 12px;
+
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#StartButton{
+    margin-top: 20px;
+    width: 150px;
+}
+#EndButton{
+    margin-top: 20px;
+}
+#ReStartButton{
+    margin-top: 20px;
+}
+#success {
+    font-weight: bold;
+}
+
+#point {
+    font-weight: bold;
+}
+
+#endText {
+    font-weight: bold;
+}
+
+#endPoint {
+    font-weight: bold;
+}
+
+#endSucc {
+    font-weight: bold;
+}
+#startScreen{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#gameScreen{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
