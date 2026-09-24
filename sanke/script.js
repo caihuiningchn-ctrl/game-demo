@@ -9,6 +9,7 @@ const reStart = document.querySelector("#reStart");
 
 const food = document.querySelector(".food");
 const bomb = document.querySelector(".bomb");
+const timerDisplay = document.querySelector(".timer");
 
 
 let headPosition = {
@@ -89,7 +90,6 @@ function createBomb() {
 
 
 function startBomb() {
-    createBomb();
     console.log(bombTime);
     bombInterval = setInterval(createBomb, bombTime);
 
@@ -99,7 +99,8 @@ function startBomb() {
 function touchBomb() {
 
     if (bombPosition.x === headPosition.x && bombPosition.y === headPosition.y) {
-        
+        console.log("bombPosition: ", bombPosition);
+        console.log("headPosition: ", headPosition);
         showGameOver();
     }
 }
@@ -107,6 +108,34 @@ function touchBomb() {
 function stopBomb() {
     clearInterval(bombInterval);
 }
+
+// timer
+let time = 0;
+let timer;
+
+function startTimer() {
+     clearInterval(timer);
+    timer = setInterval(() => {
+        time++;
+
+        let minutes = Math.floor(time / 60);
+        let seconds = time % 60;
+
+        timerDisplay.textContent =
+            `Time: ${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    }, 1000);
+}
+
+function resetTimer() {
+    clearInterval(timer);
+    time = 0;
+    timerDisplay.textContent = "Time: 00:00";
+}
+
+function stopTimer() {
+    clearInterval(timer);
+}
+
 
 //body
 let bodyPosition = [];
@@ -247,7 +276,7 @@ function showGameOver() {
     stopMove();
     stopFood();
     stopBomb();
-
+    stopTimer();
     gameOver.style.display = "block";
     reStart.style.display = "";
     stopButton.style.display = "none";
@@ -263,6 +292,7 @@ function move() {
     head.style.top = headPosition.y * cellSize + "px";
 
     eatFood();
+    touchBomb();
 
 }
 
@@ -277,7 +307,7 @@ function stopMove() {
 // ===== リスタート =====
 
 reStart.addEventListener("click", function () {
-
+    resetTimer();
     stopMove();
     stopFood();
     stopBomb();
@@ -294,8 +324,8 @@ reStart.addEventListener("click", function () {
     stopButton.style.display = "none";
     startButton.style.display = "";
     food.style.display = "none";
+    bomb.style.display = "none";
 
-    startFood();
     bodyPosition = [];
 
     const bodies = document.querySelectorAll(".body");
@@ -304,13 +334,13 @@ reStart.addEventListener("click", function () {
         body.remove();
     });
 
-    food.style.display = "none";
 });
 
 
 // ===== スタート =====
 
 startButton.addEventListener("click", function () {
+    startTimer();
     startFood();
     startBomb();
     gameInterval = setInterval(moveRight, speed);
@@ -324,9 +354,10 @@ startButton.addEventListener("click", function () {
 // ===== ストップ =====
 
 stopButton.addEventListener("click", function () {
-
+    stopTimer();
     stopMove();
     stopFood();
+    stopBomb();
     startButton.style.display = "";
     stopButton.style.display = "none";
 });
