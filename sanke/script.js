@@ -6,6 +6,7 @@ const gameOver = document.querySelector(".gameover");
 const startButton = document.querySelector("#startButton");
 const stopButton = document.querySelector("#stopButton");
 const reStart = document.querySelector("#reStart");
+const resultButton = document.querySelector("#resultButton");
 
 const food = document.querySelector(".food");
 const bomb = document.querySelector(".bomb");
@@ -358,17 +359,18 @@ reStart.addEventListener("click", function () {
 
 
 // ===== スタート =====
-
+let currentMove = moveRight;
 startButton.addEventListener("click", function () {
     startTimer();
     startFood();
     startBomb();
    
-    gameInterval = setInterval(moveRight, speed);
+    gameInterval = setInterval(currentMove, speed);
 
     startButton.style.display = "none";
     stopButton.style.display = "";
     reStart.style.display = "";
+    resultButton.style.display = "";
 });
 
 
@@ -453,4 +455,23 @@ document.addEventListener("keyup", function (event) {
     }
 
     activeKey = null;
+});
+
+
+// result
+
+const result = document.querySelector(".result");
+const resultTime = document.querySelector("#resultTime");
+const resultScore = document.querySelector("#resultScore");
+const closeResult = document.querySelector("#closeResult");
+
+resultButton.addEventListener("click", function () {
+    resultTime.textContent = timerDisplay.textContent;
+    resultScore.textContent = scoreDisplay.textContent;
+
+    result.style.display = "flex";
+});
+
+closeResult.addEventListener("click", function () {
+    result.style.display = "none";
 });
