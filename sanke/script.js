@@ -326,7 +326,7 @@ function stopMove() {
 
 // ===== リスタート =====
 
-reStart.addEventListener("click", function () {
+function resetGame() {
     resetTimer();
     stopMove();
     stopFood();
@@ -354,6 +354,10 @@ reStart.addEventListener("click", function () {
     bodies.forEach(function (body) {
         body.remove();
     });
+}
+
+reStart.addEventListener("click", function () {
+    resetGame();
 
 });
 
@@ -470,8 +474,10 @@ resultButton.addEventListener("click", function () {
     resultScore.textContent = scoreDisplay.textContent;
 
     result.style.display = "flex";
+    resetGame();
 });
 
 closeResult.addEventListener("click", function () {
     result.style.display = "none";
+    resultButton.style.display = "none";
 });
