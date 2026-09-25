@@ -455,7 +455,9 @@ document.addEventListener("keyup", function (event) {
         isBoosting = false;
 
         stopMove();
-        gameInterval = setInterval(currentMove, speed);
+        if (gameOver.style.display !== "block") {
+            gameInterval = setInterval(currentMove, speed);
+        }
     }
 
     activeKey = null;
