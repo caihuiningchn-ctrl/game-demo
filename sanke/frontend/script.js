@@ -475,9 +475,28 @@ resultButton.addEventListener("click", function () {
 
     result.style.display = "flex";
     resetGame();
+
+    fetch("/api/scores", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            playerName: Number(timerDisplay.textContent),
+            score: Number(scoreDisplay.textContent)
+        })
+    });
 });
 
 closeResult.addEventListener("click", function () {
     result.style.display = "none";
     resultButton.style.display = "none";
 });
+
+
+
+fetch("/api/scores")
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });
